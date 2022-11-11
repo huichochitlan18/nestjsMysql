@@ -80,6 +80,17 @@ export class CatalogosService {
     return await this.disciplinaRepository.find();
   }
 
+  async listaDisciplinaPlan(id: number) {
+    const queryBuilder =
+      this.catalogoDisciplinaPlanesRepository.createQueryBuilder('disciplina');
+    var disciplina = await queryBuilder
+      .where('disciplina.disciplina = :disciplinaid', { disciplinaid: id })
+      .getMany();
+
+    return disciplina;
+    // return await this.
+  }
+
   findAll() {
     return `This action returns all catalogos`;
   }

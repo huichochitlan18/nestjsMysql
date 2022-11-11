@@ -34,8 +34,11 @@ export class CatalogosController {
     return this.catalogosService.listaAfiliacionMedica();
   }
 
+  @Get('plan/:id')
+  listaDisciplinaPlan(@Param('id') id: string) {
+    return this.catalogosService.listaDisciplinaPlan(+id);
+  }
   
-
   @Get()
   findAll() {
     return this.catalogosService.findAll();
