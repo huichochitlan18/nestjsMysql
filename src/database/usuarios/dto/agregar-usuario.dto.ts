@@ -37,5 +37,10 @@ export class AgregarUsuarioDto {
     @ValidateNested()
     @Type((type) => UsuarioInformacionContactoEmergenciaDto)
     informacionContactoEmergencia: UsuarioInformacionContactoEmergencia[];
+
+    @IsOptional()
+    // @ValidateNested()
+    // @Type((type) => UsuarioInformacionContactoEmergenciaDto)
+    horario: any;
    
 }

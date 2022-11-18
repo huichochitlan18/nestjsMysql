@@ -10,37 +10,38 @@ import {
 import { UsuarioPlanInscripcion } from './usuario-plan-inscripcion';
 
 
-@Entity()
+// @Entity()
 export class UsuarioPlanHorario {
 
-  @PrimaryGeneratedColumn()
-  id: number;
+  // @PrimaryGeneratedColumn('increment')
+  // id?: number;
 
-  @Column('int', {
-    // unique:true
-    // default: 'ninguna',
-  })
-  dia: number;
+  // @Column('int', {
+  //   // unique:true
+  //   // default: 'ninguna',
+  // })
+  // dia: number;
 
-  @Column('time', {
-    // unique:true
-    // default: 'ninguna',
-  })
-  inicio: number;
+  // @Column('time', {
+  //   // unique:true
+  //   // default: 'ninguna',
+  // })
+  // inicio: number;
 
-  @Column('time', {
-    // unique:true
-    // default: 'ninguna',
-  })
-  fin: number;
+  // @Column('time', {
+  //   // unique:true
+  //   // default: 'ninguna',
+  // })
+  // fin: number;
 
-  @ManyToOne(
-    () => UsuarioPlanInscripcion,
-    (usuarioPlanInscripcion)=>usuarioPlanInscripcion.horario,
-    // { cascade: true }
-  )
-  @JoinColumn()
-  inscripcion?: UsuarioPlanInscripcion
+  // @ManyToOne(
+  //   () => UsuarioPlanInscripcion,
+  //   (usuarioPlanInscripcion)=>usuarioPlanInscripcion.horario,
+  //   {nullable:false}
+  //   // { cascade: true }
+  // )
+  // @JoinColumn()
+  // inscripcion?: UsuarioPlanInscripcion
   
   
   // @ManyToOne(

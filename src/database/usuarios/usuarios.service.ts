@@ -18,11 +18,11 @@ import {
   UsuarioInformacionMedica,
   UsuarioInformacionContacto,
   UsuarioInformacionContactoEmergencia,
+  UsuarioPlanInscripcion,
 } from './entities';
 
 @Injectable()
 export class UsuariosService {
-  
   private readonly logger = new Logger('UsuariosService');
 
   constructor(
@@ -38,11 +38,18 @@ export class UsuariosService {
     private usuarioInformacionContactoRepository: Repository<UsuarioInformacionContacto>,
     @InjectRepository(UsuarioInformacionContactoEmergencia)
     private usuarioInformacionContactoEmergenciaRepository: Repository<UsuarioInformacionContactoEmergencia>,
+    @InjectRepository(UsuarioPlanInscripcion)
+    private usuarioPlanInscripcionRepository: Repository<UsuarioPlanInscripcion>,
   ) {}
 
   async create(agregarUsuarioDto: AgregarUsuarioDto) {
+    // return agregarUsuarioDto;
+
+    let inscripciones: UsuarioPlanInscripcion[] = [];
+
     try {
       const {
+        horario = [],
         informacionContactoEmergencia = [],
         informacionContacto = {},
         informacionMedica = {},
@@ -63,9 +70,12 @@ export class UsuariosService {
           this.usuarioInformacionContactoEmergenciaRepository.create(
             informacionContactoEmergencia,
           ),
+        inscripcion: this.usuarioPlanInscripcionRepository.create(horario)
       });
 
       await this.usuarioPerfilRepository.save(nuevoUsuario);
+      
+      // console.log(agregarUsuarioDto.informacionPersonal.fechaNacimiento.toString().split('T')[0] );
 
       return nuevoUsuario;
     } catch (error) {

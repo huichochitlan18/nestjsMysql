@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   Entity,
   JoinColumn,
@@ -37,11 +38,8 @@ export class UsuarioInformacionPersonal {
   })
   curp: string;
 
-//   @OneToOne(() => Usuario, 
-// //   (usuario) => usuario.informacionPersonal, 
-//   {
-//     eager: true,
-//   })
-//   @JoinColumn()
-//   usuario: Usuario;
+  @BeforeInsert()
+  soloFecha(){
+    this.fechaNacimiento = new Date(this.fechaNacimiento.toString().split('T')[0]); // 'T' para dividir la fecha de la hora [0] la fecha esta en la posicion 0
+  }
 }

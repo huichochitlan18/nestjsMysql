@@ -22,14 +22,16 @@ export class UsuarioInformacionMedicaDto {
 
   @IsNumber()
   @IsPositive()
+  @Type(() => Number)
   estatura: number;
 
   @IsNumber()
   @IsPositive()
+  @Type(() => Number)
   peso: number;
 
   @IsString()
-  @IsIn(['Tipo A', 'Tipo B', 'Tipo AB', 'Tipo O'])
+  @IsIn(['O-','O+','A−','A+','B−','B+','AB-','AB+',])
   tipoSangre: string;
 
   @IsNumber()

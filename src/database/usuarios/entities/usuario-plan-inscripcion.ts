@@ -15,8 +15,26 @@ import { UsuarioPlanHorario } from './usuario-plan-horario';
 
 @Entity()
 export class UsuarioPlanInscripcion {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('increment')
+  id?: number;
+
+  @Column('int', {
+    // unique:true
+    // default: 'ninguna',
+  })
+  dia: number;
+
+  @Column('time', {
+    // unique:true
+    // default: 'ninguna',
+  })
+  inicio: number;
+
+  @Column('time', {
+    // unique:true
+    // default: 'ninguna',
+  })
+  fin: number;
 
   @ManyToOne(
     () => CatalogoDisciplinaPlanes,
@@ -29,22 +47,21 @@ export class UsuarioPlanInscripcion {
   @JoinColumn()
   plan?: CatalogoDisciplinaPlanes;
 
-  @ManyToOne(
-    () => UsuarioPerfil,
-    // (usuarioDatosMedicos)=>usuarioDatosMedicos.id,
-    // { cascade: true }
-  )
+  @ManyToOne(() => UsuarioPerfil, (usuarioPerfil) => usuarioPerfil.inscripcion, {
+    // cascade: true,
+    // eager: true,
+  })
   @JoinColumn()
   usuarioPerfil?: UsuarioPerfil;
 
-  @OneToMany(
-    () => UsuarioPlanHorario,
-    (usuarioPlanHorario)=>usuarioPlanHorario.inscripcion,
-    { 
-      cascade: true,
-      eager: true,
-    }
-  )
-  // @JoinColumn()
-  horario?:UsuarioPlanHorario[]
+  // @OneToMany(
+  //   () => UsuarioPlanHorario,
+  //   (usuarioPlanHorario) => usuarioPlanHorario.inscripcion,
+  //   {
+  //     cascade: true,
+  //     eager: true,
+  //   },
+  // )
+  // // @JoinColumn()
+  // horario: UsuarioPlanHorario;
 }
