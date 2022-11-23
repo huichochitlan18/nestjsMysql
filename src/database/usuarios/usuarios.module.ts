@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { UsuariosController } from './usuarios.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,12 +8,14 @@ import { UsuarioInformacionContactoEmergencia } from './entities/usuario-informa
 import { UsuarioInformacionContacto } from './entities/usuario-informacion-contacto';
 import { UsuarioPlanInscripcion } from './entities/usuario-plan-inscripcion';
 import { UsuarioPlanHorario } from './entities/usuario-plan-horario';
+import { AuthModule } from '../../auth/auth.module';
 
 
 @Module({
   controllers: [UsuariosController],
   providers: [UsuariosService],
   imports: [
+    forwardRef(()=>AuthModule),
     TypeOrmModule.forFeature([
       Usuario,
       UsuarioPerfil,
@@ -24,6 +26,8 @@ import { UsuarioPlanHorario } from './entities/usuario-plan-horario';
       UsuarioPlanInscripcion,
       UsuarioPlanHorario
     ]),
+    AuthModule
   ],
+  exports:[TypeOrmModule]
 })
 export class UsuariosModule {}

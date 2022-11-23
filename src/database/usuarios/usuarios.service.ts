@@ -8,9 +8,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { Repository } from 'typeorm';
-import { AgregarUsuarioDto } from './dto/agregar-usuario.dto';
+import { AgregarUsuarioAlumnoDto } from './dto/agregar-usuario-alumno.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { UsuarioAgregarContactoEmergenciaDto } from './dto/usuario-agregar-contacto-emergencia.dto';
+import { UsuarioDto } from './dto/usuario.dto';
 import {
   Usuario,
   UsuarioInformacionPersonal,
@@ -20,7 +21,9 @@ import {
   UsuarioInformacionContactoEmergencia,
   UsuarioPlanInscripcion,
 } from './entities';
-
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
 @Injectable()
 export class UsuariosService {
   private readonly logger = new Logger('UsuariosService');
@@ -40,12 +43,12 @@ export class UsuariosService {
     private usuarioInformacionContactoEmergenciaRepository: Repository<UsuarioInformacionContactoEmergencia>,
     @InjectRepository(UsuarioPlanInscripcion)
     private usuarioPlanInscripcionRepository: Repository<UsuarioPlanInscripcion>,
+    private readonly jwtService:JwtService
+
   ) {}
 
-  async create(agregarUsuarioDto: AgregarUsuarioDto) {
+  async agrearAlumno(agregarUsuarioAlumnoDto: AgregarUsuarioAlumnoDto) {
     // return agregarUsuarioDto;
-
-    let inscripciones: UsuarioPlanInscripcion[] = [];
 
     try {
       const {
@@ -56,9 +59,9 @@ export class UsuariosService {
         informacionPersonal = {},
         usuario = {},
         ...a
-      } = agregarUsuarioDto;
+      } = agregarUsuarioAlumnoDto;
 
-      const nuevoUsuario = this.usuarioPerfilRepository.create({
+      const nuevoAlumno = this.usuarioPerfilRepository.create({
         usuario: this.usuarioRepository.create(usuario),
         informacionPersonal:
           this.usuarioInformacionPersonalRepository.create(informacionPersonal),
@@ -70,19 +73,36 @@ export class UsuariosService {
           this.usuarioInformacionContactoEmergenciaRepository.create(
             informacionContactoEmergencia,
           ),
-        inscripcion: this.usuarioPlanInscripcionRepository.create(horario)
+        inscripcion: this.usuarioPlanInscripcionRepository.create(horario),
       });
 
-      await this.usuarioPerfilRepository.save(nuevoUsuario);
-      
-      // console.log(agregarUsuarioDto.informacionPersonal.fechaNacimiento.toString().split('T')[0] );
+      await this.usuarioPerfilRepository.save(nuevoAlumno);
 
-      return nuevoUsuario;
+      // console.log(agregarUsuarioDto.informacionPersonal.fechaNacimiento.toString().split('T')[0] );
+      return nuevoAlumno;
     } catch (error) {
       this.handleDBExceptions(error);
     }
   }
 
+  async agregar(usuarioDto: UsuarioDto) {
+    const { contrasena, ...usuarioDatos } = usuarioDto;
+
+    try {
+      const nuevoUsuario = this.usuarioRepository.create({
+        ...usuarioDatos,
+        contrasena: bcrypt.hashSync(contrasena, 10),
+      });
+      await this.usuarioRepository.save(nuevoUsuario);
+      delete nuevoUsuario.contrasena;
+      return { ...nuevoUsuario, token: this.getJwtToken({ id: nuevoUsuario.id }) };
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+    // return usuarioDto;
+  }
+
+  
   async agregarContactoEmergencia(
     usuarioAgregarContactoEmergenciaDto: UsuarioAgregarContactoEmergenciaDto,
   ) {
@@ -126,6 +146,12 @@ export class UsuariosService {
     return `This action removes a #${id} usuario`;
   }
 
+  
+  private getJwtToken(payload: JwtPayload) {
+    const token = this.jwtService.sign(payload);
+    return token;
+  }
+  
   private handleDBExceptions(error: any) {
     console.log(error);
 

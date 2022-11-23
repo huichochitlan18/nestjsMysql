@@ -9,20 +9,30 @@ import {
   Query,
 } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
-import { AgregarUsuarioDto } from './dto/agregar-usuario.dto';
+import { AgregarUsuarioAlumnoDto } from './dto/agregar-usuario-alumno.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { UsuarioAgregarContactoEmergenciaDto } from './dto/usuario-agregar-contacto-emergencia.dto';
+import { UsuarioDto } from './dto/usuario.dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('usuarios')
 @Controller('usuarios')
-
 export class UsuariosController {
   constructor(private readonly usuariosService: UsuariosService) {}
 
-  @Post()
-  create(@Body() agregarUsuarioDto: AgregarUsuarioDto) {
+  @Post('registrar-alumno')
+  @ApiResponse({status:201})
+  agregarAlumno(@Body() agregarUsuarioAlumnoDto: AgregarUsuarioAlumnoDto) {
     // return agregarUsuarioDto;
-    return this.usuariosService.create(agregarUsuarioDto);
+    return this.usuariosService.agrearAlumno(agregarUsuarioAlumnoDto);
+  }
+
+  @Post('registrar')
+  agregar(@Body() usuarioDto: UsuarioDto) {
+    // return agregarUsuarioDto;
+    return this.usuariosService.agregar(usuarioDto);
   }
 
   @Post('/test')

@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UsuariosModule } from './database/usuarios/usuarios.module';
 import { CatalogosModule } from './database/catalogos/catalogos.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -19,7 +20,8 @@ import { CatalogosModule } from './database/catalogos/catalogos.module';
       // migrationsRun: false
     }),
     UsuariosModule,
-    CatalogosModule,],
+    CatalogosModule,
+    AuthModule,],
   controllers: [],
   providers: [],
 })

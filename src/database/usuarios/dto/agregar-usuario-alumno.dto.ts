@@ -9,9 +9,8 @@ import { UsuarioInformacionContactoDto } from './usuario-informacion-contacto.dt
 import { UsuarioInformacionContacto } from '../entities/usuario-informacion-contacto';
 import { UsuarioInformacionContactoEmergenciaDto } from './usuario-informacion-contacto-emergencia.dto';
 import { UsuarioInformacionContactoEmergencia } from '../entities/usuario-informacion-contacto-emergencia';
-import { UsuarioPlanInscripcionDto } from './usuario-plan-inscripcion';
 
-export class AgregarUsuarioDto {
+export class AgregarUsuarioAlumnoDto {
 
     @IsOptional()
     @ValidateNested()

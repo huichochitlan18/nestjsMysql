@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UsuarioInformacionPersonal } from '.';
 
 @Entity()
@@ -52,6 +52,14 @@ export class Usuario {
   })
   fechaRegistro?: Date;
 
+  @BeforeInsert()
+  correoToLowerCaseInsert(){
+    this.correo = this.correo.toLowerCase().trim();
+  }
+  @BeforeUpdate()
+  correoToLowerCaseUpdate(){
+    this.correoToLowerCaseInsert();
+  }
 //   @OneToOne(
 //     () => UsuarioInformacionPersonal,
 //     (usuarioInformacionPersonal)=>usuarioInformacionPersonal.usuario,
