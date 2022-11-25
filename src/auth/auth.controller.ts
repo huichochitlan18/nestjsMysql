@@ -65,7 +65,6 @@ export class AuthController {
   @UseGuards(AuthGuard(), UserRoleGuard)
   testPrivateRute2(
     @GetUser() usuario: Usuario,
-    
   ) {
     // console.log({ usuario });
     return {

@@ -49,6 +49,11 @@ export class UsuariosController {
   findAll(@Query() paginationDto: PaginationDto) {
     return this.usuariosService.findAll(paginationDto);
   }
+  @Get('documento/:id')
+  documentoInscripcion(@Param('id') id:string){
+    // console.log(id)
+    return this.usuariosService.descargarFormato(id);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

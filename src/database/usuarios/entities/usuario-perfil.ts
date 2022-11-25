@@ -11,6 +11,7 @@ import { UsuarioInformacionContacto } from './usuario-informacion-contacto';
 import { UsuarioInformacionContactoEmergencia } from './usuario-informacion-contacto-emergencia';
 import { UsuarioInformacionMedica } from './usuario-informacion-medica';
 import { UsuarioPlanInscripcion } from './usuario-plan-inscripcion';
+import { UsuarioPagos } from './usuario-pagos';
 
 @Entity()
 export class UsuarioPerfil {
@@ -87,5 +88,17 @@ export class UsuarioPerfil {
   )
   // @JoinColumn()
   inscripcion?: UsuarioPlanInscripcion[];
+
+  @OneToMany(
+    () => UsuarioPagos,
+    (usuarioPagos)=>usuarioPagos.usuarioPerfil,
+    {
+      // cascade:['insert', 'update'],  
+      cascade: true,
+      eager: true
+    },
+  )
+  // @JoinColumn()
+  pagos?: UsuarioPagos[];
 
 }

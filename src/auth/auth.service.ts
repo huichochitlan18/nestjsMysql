@@ -28,7 +28,7 @@ export class AuthService {
 
     const usuario = await this.usuarioRepository.findOne({
       where: { correo },
-      select: { contrasena: true, correo: true, id:true },
+      select: { contrasena: true, correo: true, id:true, nombre:true,apellidoPaterno:true,apellidoMaterno:true,rol:true },
     });
 
     if (!usuario) {
@@ -41,10 +41,6 @@ export class AuthService {
 
     return { ...usuario, token: this.getJwtToken({ id: usuario.id }) };
 
-    // try {
-    // } catch (error) {
-    //   this.handleDBExceptions(error);
-    // }
   }
 
   async checkAuthStatus(usuario:Usuario){

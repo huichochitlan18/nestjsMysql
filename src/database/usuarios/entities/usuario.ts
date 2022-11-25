@@ -13,7 +13,7 @@ export class Usuario {
   correo: string;
 
   @Column('varchar', {
-    // select: false,    
+    select: false,    
     nullable:true
   })
   contrasena?: string;
