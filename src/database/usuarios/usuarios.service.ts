@@ -27,6 +27,8 @@ import createReport from 'docx-templates';
 import { join } from 'path';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
+import { UsuarioPagoDto } from './dto/usuario-pago.dto';
+import { UsuarioPagos } from './entities/usuario-pagos';
 @Injectable()
 export class UsuariosService {
   private readonly logger = new Logger('UsuariosService');
@@ -46,8 +48,10 @@ export class UsuariosService {
     private usuarioInformacionContactoEmergenciaRepository: Repository<UsuarioInformacionContactoEmergencia>,
     @InjectRepository(UsuarioPlanInscripcion)
     private usuarioPlanInscripcionRepository: Repository<UsuarioPlanInscripcion>,
+    @InjectRepository(UsuarioPagos)
+    private usuarioPagosRepository: Repository<UsuarioPagos>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async agrearAlumno(agregarUsuarioAlumnoDto: AgregarUsuarioAlumnoDto) {
     // return agregarUsuarioDto;
@@ -139,8 +143,21 @@ export class UsuariosService {
     return usuarios;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
+  async findOne(id: string) {
+    const usuario = await this.usuarioPerfilRepository.findOneBy({
+      usuario: {
+        id: id,
+      },
+    });
+    return usuario;
+  }
+
+  agregarPago(usuarioPagoDto: UsuarioPagoDto) {
+
+    const nuevoPago = this.usuarioPagosRepository.create(usuarioPagoDto);
+    this.usuarioPagosRepository.save(nuevoPago);
+    return nuevoPago;
+
   }
 
   update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
@@ -260,6 +277,7 @@ export class UsuariosService {
     // const asdf = Date.now() - new Date(perfil.informacionPersonal.fechaNacimiento.);
     console.log(Math.floor(diff / (1000 * 60 * 60 * 24 * 365)));
     // console.log(typeof new Date());
+    
     return { perfil, test: hoy.getTime() };
   }
 

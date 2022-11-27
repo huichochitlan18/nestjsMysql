@@ -47,7 +47,7 @@ export class UsuarioPagos {
   @Column('varchar', {
     // default: true,
   })
-  observaciones?: boolean;
+  observaciones?: string;
 
   @Column('date', {
     // unique:true
